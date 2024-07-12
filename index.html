@@ -8,10 +8,24 @@
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
+<body onload="totalRegenerate(true)">
   <canvas id="output"></canvas>
-  <div id="sidebar">
-    <button onclick="ELEVATION_SEED++;totalRegenerate();">Regenerate</button>
+  <div id="sidebar" onload="sidebarLoad();">
+	Elevation Seed: <input type="number" id="elevationSeedInput" placeholder="Elevation Seed" maxlength="6" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"><button onclick="this.previousElementSibling.value = Math.floor(Math.random()*1000000);">Randomize</button><br>
+	Rain Seed: <input type="number" id="featureSeedInput" placeholder="Rain Seed" maxlength="6" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"><button onclick="this.previousElementSibling.value = Math.floor(Math.random()*1000000);">Randomize</button><br>
+	State Seed: <input type="number" id="stateSeedInput" placeholder="State Seed" maxlength="6" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"><button onclick="this.previousElementSibling.value = Math.floor(Math.random()*1000000);">Randomize</button><br>
+    <button onclick="regenerate();">Regenerate</button><br>
+    <button onclick="displayMode('elevation')">View Elevation</button><br>
+	<button onclick="displayMode('moisture')">View Moisture</button><br>
+	<button onclick="displayMode('biome')">View Biomes</button><br>
+	<button onclick="displayMode('state')">View States</button><br>
+	View State Waterway Control: <input onchange="DISPLAY_WATER = this.checked;display();" type="checkbox"><br>
+	Rough Edges: <input onclick="ROUGH_LINES = this.checked;display();" type="checkbox"><br>
+	Cell Borders: <input onclick="CELL_BORDERS = this.checked;display();" type="checkbox"><br>
+	<script src="ui.js"></script>
+  </div>
+  <div id="footer">
+	
   </div>
   <script>
     const canvas = document.getElementById("output");     </script>
@@ -20,8 +34,12 @@
   <script src="lib/mySampler.js" type=""></script>
   <script src="lib/fortune.min.js"></script>
   <script src="script.js"></script>
+  <script src="heightmap.js"></script>
+  <script src="moisture.js"></script>
   <script src="map.js"></script>
   <script src="lib/util.js"></script>
+  <script src="lib/color.js"></script>
+  <script src="states.js"></script>
   <script src="display.js"></script>
   <script src="main.js"></script>
 
