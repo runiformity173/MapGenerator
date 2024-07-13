@@ -1,6 +1,8 @@
 // Coastline and lakes should be curves
 // UI
-// Doing state type distribution and placement now
+// "Use strict" on all files
+
+// Doing state naming rn
 let random = 0;
 function totalRegenerate(points=false,displayResults=true) {
 	console.time("whole regenerate");

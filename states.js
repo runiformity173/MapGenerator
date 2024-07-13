@@ -4,7 +4,17 @@ let state_type = [];
 let state_expansionism = [];
 let state_capital = [];
 let state_cells = [];
+let state_namebase = [];
+let state_form = [];
+let state_name = [];
 let queue = [];
+const weightedNameBase = {
+	32:80, // Human
+	33:9, // Elven
+	35:9, // Dwarven
+	37:1, // Goblin
+	34:1, // Drow
+}
 function assignStates() {
 	assignCellSuitabilities();
 	f_state = [];
@@ -52,6 +62,7 @@ function assignStates() {
 		state_expansionism[i] = defineStateExpansionism(state_type[i]);
 		state_capital[i] = states[i];
 		state_cells[i] = 0;
+		state_namebase[i] = weightedRandom(weightedNameBase);
 	}
 	advance();
 	// while (queue.size() > 0) {
@@ -72,6 +83,7 @@ function assignStates() {
 	// 		}
 	// 	}
 	// }
+	defineStateForms();
 }
 let focusState = "None";
 /*
@@ -179,7 +191,6 @@ function getBiomeCost(b, biome, h, type) {
 
 let f_suitability = [];
 function assignCellSuitabilities() {
-	console.time("cellValues");
 	f_suitability = [];
 	const sorted = f_flow.filter((o,i)=>(f_elevation[i]>SEA_LEVEL&&o>=3)).sort((a,b)=>a-b);
 	const flowMedian = sorted.length&1?sorted[Math.floor(sorted.length/2)]:(sorted[Math.floor(sorted.length/2)]+sorted[Math.floor(sorted.length/2)-1])/2;
@@ -210,6 +221,128 @@ function assignCellSuitabilities() {
   
 	  f_suitability[i] = s*random();
 	}
-	console.timeEnd("cellValues");
   }
-// setTimeout(function(){displayMode("suitability")},2000);
+  function weightedRandom(object) {
+	const array = [];
+	for (const key in object) {
+	  for (let i = 0; i < object[key]; i++) {
+		array.push(key);
+	  }
+	}
+	return array[Math.floor(random() * array.length)];
+  }
+  function defineStateForms() {
+	const adjForms = [
+		"Empire",
+		"Sultanate",
+		"Khaganate",
+		"Shogunate",
+		"Caliphate",
+		"Despotate",
+		"Theocracy",
+		"Oligarchy",
+		"Union",
+		"Confederation",
+		"Trade Company",
+		"League",
+		"Tetrarchy",
+		"Triumvirate",
+		"Diarchy",
+		"Horde",
+		"Marches"
+	  ];
+	
+	  const getFullName = state => {
+		if (!state_form[state]) return state_name[state];
+		if (!state_name[state] && state_form[state]) return "The " + state.formName;
+		const adjName = adjForms.includes(state_form[state]) && !/-| /.test(state_name[state]);
+		return adjName ? `${getAdjective(state_name[state])} ${state_form[state]}` : `${state_form[state]} of ${state_name[state]}`;
+	  };
+    const generic = {Monarchy: 25, Republic: 2, Union: 1};
+    const naval = {Monarchy: 25, Republic: 8, Union: 3};
+	
+	const sorted = state_cells.map(s => s).sort((a, b) => b - a);
+    const median = sorted.length&1?sorted[Math.floor(sorted.length/2)]:(sorted[Math.floor(sorted.length/2)]+sorted[Math.floor(sorted.length/2)-1])/2;;
+    const empireMin = sorted[Math.max(Math.ceil(STATE_NUMBER ** 0.4) - 2, 0)];
+    const expTiers = state_cells.map(s => {
+      let tier = Math.min(Math.floor((s / median) * 2.6), 4);
+      if (tier === 4 && s < empireMin) tier = 3;
+      return tier;
+    });
+
+    const monarchy = ["Duchy", "Grand Duchy", "Principality", "Kingdom", "Empire"]; // per expansionism tier
+    const republic = {
+      Republic: 75,
+      Federation: 4,
+      "Trade Company": 4,
+      "Most Serene Republic": 2,
+      Oligarchy: 2,
+      Tetrarchy: 1,
+      Triumvirate: 1,
+      Diarchy: 1,
+      Junta: 1
+    }; // weighted random
+    const union = {
+      Union: 3,
+      League: 4,
+      Confederation: 1,
+      "United Kingdom": 1,
+      "United Republic": 1,
+      "United Provinces": 2,
+      Commonwealth: 1,
+      Heptarchy: 1
+    }; // weighted random
+    const theocracy = {Theocracy: 20, Brotherhood: 1, Thearchy: 2, See: 1, "Holy State": 1};
+    const anarchy = {"Free Territory": 2, Council: 3, Commune: 1, Community: 1};
+
+    for (let s = 1;s<=STATE_NUMBER;s++) {
+      const tier = expTiers[s];
+
+    //   const religion = pack.cells.religion[s.center];
+    //   const isTheocracy =
+    //     (religion && pack.religions[religion].expansion === "state") ||
+    //     (P(0.1) && ["Organized", "Cult"].includes(pack.religions[religion].type));
+	  const isTheocracy = P(0.15);
+      const isAnarchy = P(0.01 - tier / 500);
+
+      if (isTheocracy) state_form[s] = "Theocracy";
+      else if (isAnarchy) state_form[s] = "Anarchy";
+      else state_form[s] = state_type[s] === "Naval" ? weightedRandom(naval) : weightedRandom(generic);
+      state_form[s] = selectForm(s, tier);
+	  state_name[s] = getState(getBaseShort(state_namebase[s]),state_namebase[s]);
+      state_name[s] = getFullName(s);
+    }
+
+    function selectForm(s, tier) {
+      const base = state_namebase[s];
+
+      if (state_form[s] === "Monarchy") {
+        const form = monarchy[tier];
+        // Default name depends on exponent tier, some culture bases have special names for tiers
+        // if (s.diplomacy) {
+        //   if (
+        //     form === "Duchy" &&
+        //     s.neighbors.length > 1 &&
+        //     rand(6) < s.neighbors.length &&
+        //     s.diplomacy.includes("Vassal")
+        //   )
+        //     return "Marches"; // some vassal duchies on borderland
+        //   if (base === 1 && P(0.3) && s.diplomacy.includes("Vassal")) return "Dominion"; // English vassals
+        //   if (P(0.3) && s.diplomacy.includes("Vassal")) return "Protectorate"; // some vassals
+        // }
+        return form;
+      }
+
+      if (state_form[s] === "Republic") {
+        return weightedRandom(republic);
+      }
+
+      if (state_form[s] === "Union") return weightedRandom(union);
+      if (state_form[s] === "Anarchy") return weightedRandom(anarchy);
+
+      if (state_form[s] === "Theocracy") {
+        if (tier > 2 && P(0.8) && [18, 17, 28].includes(base)) return "Caliphate"; // Arabic, Berber, Swahili
+        return weightedRandom(theocracy);
+      }
+    }
+  };

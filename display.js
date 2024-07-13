@@ -1,4 +1,3 @@
-// Cell borders can enabled by not stroking cells, only filling them
 canvas.height = canvas.clientHeight;
 canvas.width = canvas.clientWidth;
 const ctx = canvas.getContext("2d");
@@ -31,11 +30,7 @@ canvas.addEventListener("mousemove",function(e) {
 		display();
 	} else {
 		const i = position_f(...transformPointReverse(...getMousePos(canvas,e)));
-		let final = [];
-		final.push("State Type: "+state_type[f_state[i]]);
-		final.push("Biome: "+f_biome[i]);
-		final.push("Cost gotten: "+Math.round(f_cost[i]));
-		document.getElementById("footer").innerHTML = final.join("<br>");
+		displayCellInfo(i);
 	}
 });
 function stopDragging(e) {
@@ -48,6 +43,10 @@ window.addEventListener("keydown",function(e) {
 		TRANSLATE_X = 0;
 		TRANSLATE_Y = 0;
 		ZOOM = 1;
+		display();
+	}
+	else if (e.keyCode == 78 && e.altKey) {
+		DEBUG_DISPLAY = !DEBUG_DISPLAY;
 		display();
 	}
 });
@@ -83,12 +82,6 @@ let SelectedCell = -1;
 function clearDisplay() {
   SelectedCell = -1;
 }
-// canvas.addEventListener("click",function(e) {
-//     const [x,y] = getMousePos(canvas,e);
-//     SelectedCell = position_f(x,y);
-//     display();
-// 	alert(f_biome[SelectedCell]+" | T:"+Math.round(100*f_temperature[SelectedCell])/100+" | M:"+Math.round(100*f_moisture[SelectedCell])/100+" | E:"+Math.round(100*f_elevation[SelectedCell])/100);
-// });
 function displayMode(mode) {
 	DISPLAY_MODE = mode;
 	display();
@@ -126,6 +119,33 @@ const biomeColors = {
 	"TROPICAL_RAIN_FOREST": "#337755",
 	"TROPICAL_SEASONAL_FOREST": "#559944"
 };
+const biome_name = {};
+for (const biome in biomeColors) {
+	let final = [];
+	for (const part of biome.split("_")) {
+		final.push(part[0] + part.slice(1).toLowerCase());
+	}
+	biome_name[biome] = final.join(" ");
+}
+function displayCellInfo(i) {
+	let final = [];
+	if (DISPLAY_MODE == "state") {
+		final.push("Name: "+state_name[f_state[i]]);
+		final.push("Race: "+nameBases[state_namebase[f_state[i]]].name);
+		final.push("Type: "+state_type[f_state[i]]);
+		DEBUG_DISPLAY && final.push("Cost gotten: "+Math.round(f_cost[i]));
+	}
+	else if (DISPLAY_MODE == "biome") {
+		final.push("Biome: "+biome_name[f_biome[i]]);
+	}
+	else if (DISPLAY_MODE == "elevation") {
+		final.push("Height: "+Math.round(f_elevation[i]));
+	}
+	else if (DISPLAY_MODE == "moisture") {
+		final.push("Moisture: "+Math.floor(f_moisture[i]*100+0.5)/100);
+	}
+	document.getElementById("footer").innerHTML = final.join("<br>");
+}
 function getColor(i) {
     if (i == SelectedCell) {return "#ff0000"}
 	if (f_elevation[i] <= SEA_LEVEL && (DISPLAY_MODE!="state"||!DISPLAY_WATER)) {
