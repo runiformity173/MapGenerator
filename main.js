@@ -5,50 +5,30 @@
 // Doing state naming rn
 let random = 0;
 function totalRegenerate(points=false,displayResults=true) {
-	console.time("whole regenerate");
+	
   random = seededRandom(FEATURE_SEED);
   if (WIND_DIRECTIONS.includes("random")) {
 	WIND_DIRECTIONS = [["random",0],["random",0,1],["random",1],["random",1,2],["random",2],["random",2,3],["random",3],["random",3,0]][Math.floor(random()*8)];
   }
   random = seededRandom(POINTS_SEED);
   clearDisplay();
-  console.time("voronoi");
   if (points) {
-	generateVoronoi();
+		generateVoronoi();
   }
-  console.timeEnd("voronoi");
-console.time("heightmap");
 random = seededRandom(ELEVATION_SEED);
   generateHeightmap();
-console.timeEnd("heightmap");
-console.time("floodfill");
   floodFillBodies();
-console.timeEnd("floodfill");
-console.time("depressions");
   resolveDepressions();
-console.timeEnd("depressions");
-console.time("temperatures");
 random = seededRandom(FEATURE_SEED);
   assignTemperatures();
-console.timeEnd("temperatures");
-console.time("moistures");
   assignMoistures();
-console.timeEnd("moistures");
-console.time("rivers");
   assignRivers();
-console.timeEnd("rivers");
-console.time("biomes");
   assignBiomes();
-console.timeEnd("biomes");
 random = seededRandom(STATE_SEED);
-console.time("states");
   assignStates();
-console.timeEnd("states");
-// alert((new Set(state_type.slice(1))).size + " | "+ state_type.includes("Lake"));
-console.time("display");
   displayResults && display();
-console.timeEnd("display");
-console.timeEnd("whole regenerate");
+
+
 }
 function search() {
 	while ((new Set(state_type.slice(1))).size < 7) {
