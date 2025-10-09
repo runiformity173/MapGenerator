@@ -65,24 +65,6 @@ function assignStates() {
 		state_namebase[i] = weightedRandom(weightedNameBase);
 	}
 	advance();
-	// while (queue.size() > 0) {
-	// 	const [cost,state,cell,b,type] = queue.pop();
-	// 	if (f_state[cell]) {continue;}
-	// 	f_state[cell] = state;
-	// 	for (const neighbor of f_bordering_fs[cell]) {
-	// 		if (!f_state[neighbor]) {
-	// 			// const cultureCost = culture === cells.culture[e] ? -9 : 100;
-	// 			// const populationCost = cells.h[e] < 20 ? 0 : cells.s[e] ? Math.max(20 - cells.s[e], 0) : 5000;
-	// 			const biomeCost = getBiomeCost(b, f_biome[neighbor], f_elevation[neighbor], type);
-	// 			const heightCost = getHeightCost(f_body[neighbor], f_elevation[neighbor], type);
-	// 			const riverCost = getRiverCost(f_flow[neighbor]>=3, neighbor, type);
-	// 			const typeCost = getTypeCost(neighbor, type);
-	// 			const cellCost = Math.max(biomeCost + heightCost + riverCost + typeCost - 9, 0);
-	// 			if (isNaN(cellCost)) {alert("NO");}
-	// 			queue.push([cost+10+cellCost/state_expansionism[state],state,neighbor,b,type]);
-	// 		}
-	// 	}
-	// }
 	defineStateForms();
 }
 let focusState = "None";
@@ -106,6 +88,8 @@ function advance() {
 		f_cost[cell] = l;
 		for (const neighbor of f_bordering_fs[cell]) {
 			if (!f_state[neighbor]) {
+			    // const cultureCost: -9 if cultures match, 100 if not
+	 	        // const populationCost = cells.h[e] < 20 ? 0 : cells.s[e] ? Math.max(20 - cells.s[e], 0) : 5000;
 				const biomeCost = getBiomeCost(b, f_biome[neighbor], f_elevation[neighbor], type);
 				const heightCost = getHeightCost(f_body[neighbor], f_elevation[neighbor], type);
 				const riverCost = getRiverCost(f_flow[neighbor]>=3, neighbor, type);

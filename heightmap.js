@@ -404,7 +404,7 @@ function mask(power = 1) {
 let blobPower = 0;
 let linePower = 0;
 function generateHeightmap() {
-	blobPower = getBlobPower();
+	blobPower = getBlobPower(POINTS);
 	linePower = getLinePower();
 	f_elevation = Array.from({length:POINTS});
 	f_elevation.fill(0);

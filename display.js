@@ -149,7 +149,7 @@ function displayCellInfo(i) {
 function getColor(i) {
     if (i == SelectedCell) {return "#ff0000"}
 	if (f_elevation[i] <= SEA_LEVEL && (DISPLAY_MODE!="state"||!DISPLAY_WATER)) {
-		return f_body[i]==0?"#44447a":"#336699";
+		return biomeColors[f_biome[i]]
 	}
 	if (DISPLAY_MODE == "elevation" || DISPLAY_MODE == "moisture" || DISPLAY_MODE == "suitability") {
 		let r=g=b=80;
