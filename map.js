@@ -204,6 +204,7 @@ const biome_cost = {
 	"BEACH": 30,
 	"MARSH": 150,
 	"LAKE": 0,
+	"ICE": 30,
 	"OCEAN": 0,
 	"SNOW": 200,
 	"TUNDRA": 300,

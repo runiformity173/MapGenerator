@@ -12,9 +12,12 @@ html {
 }
 #sidebar {
   position:absolute;
-  top:0;
+  top:0px;
   right:0;
   width:20%;
+  background-color: rgba(200,200,255,0.4);
+  border-radius: 15px 0 15px 15px;
+  padding: 10px;
 }
 #sidebar input {
 	width:auto;
@@ -27,4 +30,7 @@ html {
 	text-align: center;
 	color:#ffffff;
 	font-size: large;
+}
+label, input[type="checkbox"] {
+  cursor: pointer;
 }

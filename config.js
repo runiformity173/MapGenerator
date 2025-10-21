@@ -6,14 +6,14 @@ let POINTS = 10000;
 let NOISE_SCALE = Math.max(WIDTH,HEIGHT)/10;
 // Seeds
 let POINTS_SEED = 0;
-let ELEVATION_SEED = 474481;
-let FEATURE_SEED = 654309;
-let STATE_SEED = 31502;
+let ELEVATION_SEED = Math.floor(Math.random()*1000000);
+let FEATURE_SEED = Math.floor(Math.random()*1000000);
+let STATE_SEED = Math.floor(Math.random()*1000000);
 // Shaping
 let RELAXES = 2;
 let SEA_LEVEL = 20;
-let TEMPERATURE_NORTH = 0.2; // 0.5 both for same temp. throughout
-let TEMPERATURE_SOUTH = 1.0;
+let TEMPERATURE_NORTH = 0;
+let TEMPERATURE_SOUTH = 1.2;
 let PRECIPITATION = 11.0;
 let WIND_DIRECTIONS = ["random"];
 // States

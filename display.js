@@ -176,7 +176,7 @@ function getColor(i) {
 		}
 		if (DISPLAY_WATER && f_elevation[i] <= SEA_LEVEL) {
 			if (!f_state[i]) {
-				return f_body[i]==0?"#44447a":"#336699";
+				return biomeColors[f_biome[i]];
 			}
 			const [r,g,b] = blendColors(f_body[i]==0?[0x44,0x44,0x7a]:[0x33,0x66,0x99],state_color[f_state[i]],0.3);
 			return `rgb(${clampColor(r)},${clampColor(g)},${clampColor(b)})`;

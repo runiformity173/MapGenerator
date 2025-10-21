@@ -148,7 +148,7 @@ const getState = function (name, base) {
 	if (base === undefined) base = pack.cultures[culture].base;
 
 	// exclude endings inappropriate for states name
-	if (name.includes(" ")) name = capitalize(name.replace(/ /g, "").toLowerCase()); // don't allow multiword state names
+	if (name.includes(" ")) name = name.replace(/ /g, ""); // capitalize(name.replace(/ /g, "").toLowerCase()); // don't allow multiword state names
 	if (name.length > 6 && name.slice(-4) === "berg") name = name.slice(0, -4); // remove -berg for any
 	if (name.length > 5 && name.slice(-3) === "ton") name = name.slice(0, -3); // remove -ton for any
 

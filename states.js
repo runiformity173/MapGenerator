@@ -95,7 +95,7 @@ function advance() {
 				const riverCost = getRiverCost(f_flow[neighbor]>=3, neighbor, type);
 				const typeCost = getTypeCost(neighbor, type);
 				const cellCost = Math.max(biomeCost + heightCost + riverCost + typeCost - 9, 0);
-				if (isNaN(cellCost)) {alert("NO");}
+				if (isNaN(cellCost)) {console.log(biomeCost,heightCost,riverCost,typeCost,cellCost)}
 				queue.push([cost+10+cellCost/state_expansionism[state],state,neighbor,b,type,10+cellCost/state_expansionism[state]]);
 			}
 		}
@@ -112,7 +112,7 @@ function getBiomeCost(b, biome, h, type) {
 	if (type === "Nomadic" && ["TEMPERATE_DESERT","SUBTROPICAL_DESERT","GRASSLAND"].includes(biome)) return biome_cost[biome] / 2; // less penalty for open biomes for nomads
 	return biome_cost[biome]; // general non-native biome penalty
   }
-  function getHeightCost(f, h, type) {
+function getHeightCost(f, h, type) {
 	if (type === "Lake" && h <= SEA_LEVEL && f !== 0) return 10; // low lake crossing penalty for Lake cultures
 	if (type === "Naval" && h <= SEA_LEVEL) return 300; // low sea crossing penalty for Navals
 	if (type === "Nomadic" && h <= SEA_LEVEL) return 20000; // giant sea crossing penalty for Nomads
@@ -122,7 +122,7 @@ function getBiomeCost(b, biome, h, type) {
 	if (h > 67) return 2200; // general mountains crossing penalty
 	if (h > 44) return 300; // general hills crossing penalty
 	return 0;
-  }
+}
 
   function getRiverCost(r, i, type) {
 	if (type === "River") return r ? -20 : 100; // penalty for river cultures
