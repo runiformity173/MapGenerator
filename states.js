@@ -9,11 +9,11 @@ let state_form = [];
 let state_name = [];
 let queue = [];
 const weightedNameBase = {
-	32:80, // Human
-	33:9, // Elven
-	35:9, // Dwarven
-	37:1, // Goblin
-	34:1, // Drow
+	32:24, // Human
+	33:6, // Elven
+	35:6, // Dwarven
+	37:2, // Orc
+	34:3, // Drow
 }
 function assignStates() {
 	assignCellSuitabilities();
@@ -34,29 +34,26 @@ function assignStates() {
 				break;
 			}
 		}
-		if (works) {
-			const biomes = new Set();
-			biomes.add(f_biome[j]);
-			let highCount = 0;
-			for (const i of f_bordering_fs[j]) {
-				if (f_elevation[i] > SEA_LEVEL) {
-					biomes.add(f_biome[i]);
-					if (f_elevation[i] > 62) {
-						highCount++;
-					}
+		if (!works) continue
+		const wouldBeType = defineStateType(j);
+		if (state_type.filter(o=>o===wouldBeType).length > 1 && state_type.filter(o=>o===wouldBeType).length > 1) continue;
+		const biomes = new Set();
+		biomes.add(f_biome[j]);
+		let highCount = 0;
+		for (const i of f_bordering_fs[j]) {
+			if (f_elevation[i] > SEA_LEVEL) {
+				biomes.add(f_biome[i]);
+				if (f_elevation[i] > 62) {
+					highCount++;
 				}
 			}
-			if (biomes.size > 1 || (f_elevation[j] > 62 && highCount < 2)) {
-				works = false;
-			}
 		}
-		if (works) {
-			states.push(j);
-		}
+		if (biomes.size > 1 || (f_elevation[j] > 62 && highCount < 2)) continue;
+		state_type[states.length] = wouldBeType;
+		states.push(j);
 	}
-	queue = new PriorityQueue((a,b)=>a[0] < b[0]); // const
+	queue = new PriorityQueue((a,b)=>a[0] < b[0]);
 	for (let i = 1;i < states.length;i++) {
-		state_type[i] = defineStateType(states[i]);
 		queue.push([0,i,states[i],f_biome[states[i]],state_type[i],0]);
 		state_color[i] = hslToRgb(i/STATE_NUMBER,1.0,0.5);
 		state_expansionism[i] = defineStateExpansionism(state_type[i]);

@@ -19,7 +19,7 @@
     <option>View Moistures</option>
   </select><br>
   <label for="waterwayControlCheckbox">View State Waterway Control:&nbsp;</label><input id="waterwayControlCheckbox" onchange="DISPLAY_WATER = this.checked;display();" type="checkbox"><br>
-	<label for="roughEdgesCheckbox">Rough Edges:&nbsp;</label><input id="roughEdgesCheckbox" onclick="ROUGH_LINES = this.checked;display();" type="checkbox"><br>
+	<label for="roughEdgesCheckbox">Rough Edges:&nbsp;</label><input id="roughEdgesCheckbox" onclick="ROUGH_LINES = this.checked;display();" type="checkbox" checked><br>
 	<label for="cellBordersCheckbox">Cell Borders:&nbsp;</label><input id="cellBordersCheckbox" onclick="CELL_BORDERS = this.checked;display();" type="checkbox"><br>
   <br>
 	<input type="hidden" id="elevationSeedInput" placeholder="Elevation Seed" maxlength="6" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
@@ -53,6 +53,7 @@
   <script src="states.js"></script>
   <script src="display.js"></script>
   <script src="main.js"></script>
+  <script src="help.js"></script>
 
 
 </body>

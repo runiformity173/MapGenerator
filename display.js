@@ -11,7 +11,7 @@ function handleScroll(event) {
     if (event.deltaY < 0) {
         ZOOM = Math.min(10,ZOOM*1.1);
     } else {
-        ZOOM = Math.max(1, ZOOM*0.9);
+        ZOOM = Math.max(1, ZOOM/1.1);
     }
     display();
 }
@@ -139,7 +139,7 @@ function displayCellInfo(i) {
 		final.push("Biome: "+biome_name[f_biome[i]]);
 	}
 	else if (DISPLAY_MODE == "elevation") {
-		final.push("Height: "+Math.round(f_elevation[i]));
+		final.push("Height: "+Math.floor(f_elevation[i]));
 	}
 	else if (DISPLAY_MODE == "moisture") {
 		final.push("Moisture: "+Math.floor(f_moisture[i]*100+0.5)/100);
