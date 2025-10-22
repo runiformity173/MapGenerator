@@ -9,7 +9,7 @@ let state_form = [];
 let state_name = [];
 let queue = [];
 const weightedNameBase = {
-	32:24, // Human
+	32:30, // Human
 	33:6, // Elven
 	35:6, // Dwarven
 	37:2, // Orc
