@@ -12,11 +12,11 @@
 <body onload="totalRegenerate(true)">
   <canvas id="output"></canvas>
   <div id="sidebar" onload="sidebarLoad();">
-    <select class="btn btn-outline-dark" oninput="displayMode(this.value.split(' ')[1].toLowerCase().slice(0,-1))" id="viewModeSelect">
-    <option selected>View States</option>
-    <option>View Biomes</option>
-    <option>View Elevations</option>
-    <option>View Moistures</option>
+    <b>View: </b><select class="btn btn-outline-dark" oninput="displayMode(this.value.toLowerCase().slice(0,-1))" id="viewModeSelect">
+    <option selected>States</option>
+    <option>Biomes</option>
+    <option>Elevations</option>
+    <option>Moistures</option>
   </select><br>
   <label for="waterwayControlCheckbox">View State Waterway Control:&nbsp;</label><input id="waterwayControlCheckbox" onchange="DISPLAY_WATER = this.checked;display();" type="checkbox"><br>
 	<label for="roughEdgesCheckbox">Rough Edges:&nbsp;</label><input id="roughEdgesCheckbox" onclick="ROUGH_LINES = this.checked;display();" type="checkbox" checked><br>

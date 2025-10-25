@@ -2,7 +2,7 @@ function sidebarLoad() {
 	document.getElementById("elevationSeedInput").value = ELEVATION_SEED;
 	document.getElementById("featureSeedInput").value = FEATURE_SEED;
 	document.getElementById("stateSeedInput").value = STATE_SEED;
-	DISPLAY_MODE = document.getElementById("viewModeSelect").value.split(' ')[1].toLowerCase().slice(0,-1);
+	DISPLAY_MODE = document.getElementById("viewModeSelect").value.toLowerCase().slice(0,-1);
 	DISPLAY_WATER = document.getElementById("waterwayControlCheckbox").checked;
 	ROUGH_LINES = document.getElementById("roughEdgesCheckbox").checked;
 	CELL_BORDERS = document.getElementById("cellBordersCheckbox").checked;
